@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Example PM mapping configuration",
+  "pmMapping": {
+    "PROJ": "U01234567",
+    "TEAM": "U76543210",
+    "FEAT": "U98765432"
+  },
+  "jiraUsers": {
+    "pm1@company.com": "U01234567",
+    "pm2@company.com": "U76543210"
+  },
+  "channelMapping": {
+    "production": "C01234567",
+    "staging": "C76543210"
+  }
+}

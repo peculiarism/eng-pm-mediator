@@ -1,0 +1,46 @@
+name: PM Notification
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - staging
+    # Optionally filter paths
+    # paths-ignore:
+    #   - '**.md'
+    #   - 'docs/**'
+
+jobs:
+  notify-pm:
+    name: Notify PM of Deployment
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Get full history for commit analysis
+
+      - name: Run PM Updater
+        uses: ./
+        with:
+          jira_base_url: ${{ secrets.JIRA_BASE_URL }}
+          jira_email: ${{ secrets.JIRA_EMAIL }}
+          jira_api_token: ${{ secrets.JIRA_API_TOKEN }}
+          jira_project_key: ${{ vars.JIRA_PROJECT_KEY }}
+          slack_bot_token: ${{ secrets.SLACK_BOT_TOKEN }}
+          slack_channel_or_user: ${{ vars.SLACK_PM_CHANNEL }}
+          environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
+          only_active_sprint: 'true'
+          # Optional: filter by specific statuses
+          # ticket_status_filter: 'In Progress,Code Review,Ready for Testing'
+          # Optional: provide PM mapping
+          # pm_mapping_json: '{"PROJ": "U01234567", "TEAM": "U76543210"}'
+
+      - name: Log results
+        if: always()
+        run: |
+          echo "Tickets found: ${{ steps.pm-updater.outputs.tickets_found }}"
+          echo "Tickets notified: ${{ steps.pm-updater.outputs.tickets_notified }}"
+          echo "Message timestamp: ${{ steps.pm-updater.outputs.slack_message_ts }}"

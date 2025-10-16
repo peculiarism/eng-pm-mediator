@@ -1,0 +1,39 @@
+{
+  "name": "pm-updater",
+  "version": "1.0.0",
+  "description": "GitHub Action to notify PMs via Slack when tickets in active sprint are deployed",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "package": "ncc build src/index.ts -o dist --source-map --license licenses.txt",
+    "test": "jest",
+    "lint": "eslint src/**/*.ts",
+    "format": "prettier --write src/**/*.ts"
+  },
+  "keywords": [
+    "github-action",
+    "jira",
+    "slack",
+    "sprint",
+    "notifications"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@actions/core": "^1.10.1",
+    "@actions/github": "^6.0.0",
+    "@slack/web-api": "^7.0.2",
+    "axios": "^1.6.8",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "@typescript-eslint/eslint-plugin": "^7.7.0",
+    "@typescript-eslint/parser": "^7.7.0",
+    "@vercel/ncc": "^0.38.1",
+    "eslint": "^8.57.0",
+    "jest": "^29.7.0",
+    "prettier": "^3.2.5",
+    "typescript": "^5.4.5"
+  }
+}

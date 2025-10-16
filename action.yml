@@ -1,0 +1,71 @@
+name: 'PM Updater'
+description: 'Notify PMs via Slack when tickets in active sprint/cycle are deployed (supports Jira and Linear)'
+author: 'Your Team'
+
+branding:
+  icon: 'bell'
+  color: 'blue'
+
+inputs:
+  issue_tracker:
+    description: 'Issue tracker to use: "jira" or "linear"'
+    required: false
+    default: 'jira'
+
+  # Jira Configuration
+  jira_base_url:
+    description: 'Jira base URL (e.g., https://company.atlassian.net) - required if issue_tracker is "jira"'
+    required: false
+  jira_email:
+    description: 'Jira user email for authentication - required if issue_tracker is "jira"'
+    required: false
+  jira_api_token:
+    description: 'Jira API token - required if issue_tracker is "jira"'
+    required: false
+  jira_project_key:
+    description: 'Jira project key (e.g., PROJ) - optional filter for Jira'
+    required: false
+
+  # Linear Configuration
+  linear_api_key:
+    description: 'Linear API key - required if issue_tracker is "linear"'
+    required: false
+  linear_team_key:
+    description: 'Linear team key (e.g., TEAM) - optional filter for Linear'
+    required: false
+
+  # Common Configuration
+  slack_bot_token:
+    description: 'Slack bot token'
+    required: true
+  slack_channel_or_user:
+    description: 'Slack channel ID or user ID to notify (e.g., C01234567 or U01234567)'
+    required: true
+  environment:
+    description: 'Deployment environment (e.g., staging, production)'
+    required: false
+    default: 'staging'
+  pm_mapping_json:
+    description: 'JSON string mapping project/team keys to Slack user IDs (optional)'
+    required: false
+    default: '{}'
+  only_active_sprint:
+    description: 'Only notify for tickets in active sprint/cycle'
+    required: false
+    default: 'true'
+  ticket_status_filter:
+    description: 'Comma-separated list of statuses to filter (e.g., "In Progress,Code Review")'
+    required: false
+    default: ''
+
+outputs:
+  tickets_found:
+    description: 'Number of tickets found in commits'
+  tickets_notified:
+    description: 'Number of tickets for which notifications were sent'
+  slack_message_ts:
+    description: 'Timestamp of the Slack message sent'
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'

@@ -1,0 +1,39 @@
+name: Example - Using PM Updater as External Action
+
+# This is an example of how to use the PM Updater action
+# from another repository once it's published
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  deploy-and-notify:
+    name: Deploy and Notify PM
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Your deployment steps here
+      # - name: Deploy to staging
+      #   run: ./deploy.sh staging
+
+      - name: Notify PM about deployment
+        uses: your-org/pm-updater@v1
+        with:
+          jira_base_url: https://yourcompany.atlassian.net
+          jira_email: ${{ secrets.JIRA_EMAIL }}
+          jira_api_token: ${{ secrets.JIRA_API_TOKEN }}
+          jira_project_key: PROJ
+          slack_bot_token: ${{ secrets.SLACK_BOT_TOKEN }}
+          slack_channel_or_user: C01234567 # Channel ID
+          environment: staging
+          only_active_sprint: 'true'
+
+      - name: Handle notification failure
+        if: failure()
+        run: echo "PM notification failed, but deployment succeeded"

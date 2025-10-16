@@ -1,0 +1,41 @@
+name: PM Notification (Linear)
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - staging
+
+jobs:
+  notify-pm:
+    name: Notify PM of Deployment (Linear)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run PM Updater with Linear
+        uses: ./
+        with:
+          issue_tracker: linear
+          linear_api_key: ${{ secrets.LINEAR_API_KEY }}
+          linear_team_key: ${{ vars.LINEAR_TEAM_KEY }}
+          slack_bot_token: ${{ secrets.SLACK_BOT_TOKEN }}
+          slack_channel_or_user: ${{ vars.SLACK_PM_CHANNEL }}
+          environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
+          only_active_sprint: 'true'
+          # Optional: filter by specific statuses
+          # ticket_status_filter: 'In Progress,In Review,Ready for Testing'
+          # Optional: provide PM mapping
+          # pm_mapping_json: '{"TEAM": "U01234567", "ENG": "U76543210"}'
+
+      - name: Log results
+        if: always()
+        run: |
+          echo "Issues found: ${{ steps.pm-updater.outputs.tickets_found }}"
+          echo "Issues notified: ${{ steps.pm-updater.outputs.tickets_notified }}"
+          echo "Message timestamp: ${{ steps.pm-updater.outputs.slack_message_ts }}"
