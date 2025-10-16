@@ -1,4 +1,7 @@
-# PM Updater - GitHub Action
+
+<img width="576" height="384" alt="dilbert" src="https://github.com/user-attachments/assets/0cc8df43-2eb7-426d-b292-1cfbf7b65443" />
+
+# The Engineering <> PM Mediator - GitHub Action by DevDay
 
 A GitHub Action that automatically notifies Product Managers via Slack when tickets in the active sprint are deployed. Bridges Jira sprint tracking with Slack notifications to keep PMs informed about deployment status.
 
@@ -328,4 +331,4 @@ MIT License - see LICENSE file for details
 
 ---
 
-Built with ❤️ for better PM-developer collaboration
+Built with ❤️ for better PM-developer collaboration by the [DevDay team](https://trydevday.com).
