@@ -301,12 +301,15 @@ export class LinearService implements IssueTrackerService {
     }
 
     // Build a filter for multiple identifiers
-    const filter = {
+    const filter: {
+      or: { identifier: { eq: string } }[];
+      team?: { key: { eq: string } };
+    } = {
       or: identifiers.map((id) => ({ identifier: { eq: id } })),
     };
 
     if (this.teamKey) {
-      filter['team'] = { key: { eq: this.teamKey } };
+      filter.team = { key: { eq: this.teamKey } };
     }
 
     const query = `

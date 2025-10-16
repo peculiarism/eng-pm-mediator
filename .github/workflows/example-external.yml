@@ -23,7 +23,7 @@ jobs:
       #   run: ./deploy.sh staging
 
       - name: Notify PM about deployment
-        uses: your-org/pm-updater@v1
+        uses: your-org/eng-pm-mediator@v1
         with:
           jira_base_url: https://yourcompany.atlassian.net
           jira_email: ${{ secrets.JIRA_EMAIL }}

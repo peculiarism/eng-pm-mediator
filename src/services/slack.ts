@@ -1,4 +1,4 @@
-import { WebClient, ChatPostMessageResponse } from '@slack/web-api';
+import { WebClient, ChatPostMessageResponse, Block, KnownBlock } from '@slack/web-api';
 import { NotificationData, SlackApiError } from '../types';
 import { createLogger } from '../utils/logger';
 
@@ -27,8 +27,8 @@ export class SlackService {
       commitSha: string;
       repoUrl: string;
     }
-  ): object[] {
-    const blocks: object[] = [
+  ): (Block | KnownBlock)[] {
+    const blocks: (Block | KnownBlock)[] = [
       {
         type: 'header',
         text: {
@@ -233,7 +233,7 @@ export class SlackService {
       }
 
       logger.debug(`Found user ${response.user.id} for email ${email}`);
-      return response.user.id;
+      return response.user.id ?? null;
     } catch (error) {
       logger.error(`Failed to lookup user by email: ${email}`, error as Error);
       return null;
@@ -253,8 +253,7 @@ export class SlackService {
       return response.ok;
     } catch (error) {
       logger.warning(
-        `Cannot access channel/user ${channelOrUserId}`,
-        error as Error
+        `Cannot access channel/user ${channelOrUserId}: ${(error as Error).message}`
       );
       return false;
     }

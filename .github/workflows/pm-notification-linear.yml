@@ -18,16 +18,29 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Run PM Updater with Linear
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build action
+        run: npm run package
+
+      - name: Run Eng <> PM Mediator with Linear
         uses: ./
         with:
           issue_tracker: linear
           linear_api_key: ${{ secrets.LINEAR_API_KEY }}
-          linear_team_key: ${{ vars.LINEAR_TEAM_KEY }}
+          linear_team_key: ${{ secrets.LINEAR_TEAM_KEY }}
           slack_bot_token: ${{ secrets.SLACK_BOT_TOKEN }}
-          slack_channel_or_user: ${{ vars.SLACK_PM_CHANNEL }}
+          slack_channel_or_user: ${{ secrets.SLACK_PM_CHANNEL }}
           environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
-          only_active_sprint: 'true'
+          # Optional: filter to only active cycle
+          only_active_sprint: 'false'
           # Optional: filter by specific statuses
           # ticket_status_filter: 'In Progress,In Review,Ready for Testing'
           # Optional: provide PM mapping
@@ -36,6 +49,6 @@ jobs:
       - name: Log results
         if: always()
         run: |
-          echo "Issues found: ${{ steps.pm-updater.outputs.tickets_found }}"
-          echo "Issues notified: ${{ steps.pm-updater.outputs.tickets_notified }}"
-          echo "Message timestamp: ${{ steps.pm-updater.outputs.slack_message_ts }}"
+          echo "Issues found: ${{ steps.notify-pm.outputs.tickets_found }}"
+          echo "Issues notified: ${{ steps.notify-pm.outputs.tickets_notified }}"
+          echo "Message timestamp: ${{ steps.notify-pm.outputs.slack_message_ts }}"

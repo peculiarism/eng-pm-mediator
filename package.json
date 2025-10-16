@@ -1,5 +1,5 @@
 {
-  "name": "pm-updater",
+  "name": "eng-pm-mediator",
   "version": "1.0.0",
   "description": "GitHub Action to notify PMs via Slack when tickets in active sprint are deployed",
   "main": "dist/index.js",
