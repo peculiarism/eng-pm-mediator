@@ -1,4 +1,4 @@
-name: 'PM Updater'
+name: 'Eng <> PM Mediator'
 description: 'Notify PMs via Slack when tickets in active sprint/cycle are deployed (supports Jira and Linear)'
 author: 'Your Team'
 
